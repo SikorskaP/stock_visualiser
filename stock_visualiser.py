@@ -1,4 +1,8 @@
 import resources
 
-f = resources.Functions()
-o = resources.Options()
+if __name__ == "__main__":
+        df = resources.Functions.ImportData()
+        while True:
+            resources.Options.printMenu()
+            option = int(input("Please enter a positive number: "))
+            resources.Options.chooseFromMenu(option)
