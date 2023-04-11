@@ -17,6 +17,7 @@ class Functions():
         from functions import Functions
 
     def display_dataframe(df):
+        print("You have chosen to display the dataframe.")
         print(df)
         df.info()
 
@@ -32,9 +33,6 @@ class Functions():
             df['sma_' + str(day) + '-day']=df['Close'].rolling(day).mean().shift() 
 
         def select_lengths():
-            print("One of the many trading strategies utilising mocing averages puts two differing moving averages on a chart and highlights the "
-            + "crossovers. When the shorter-term moving average crosses above the longer-term moving average, it's a buy signal. In the opposite situation, "
-            + "it's a sell signal.")
             shortAverage = int(input("Select the first time inteval: \n> "))
             longAverage = int(input("Select the second time inteval: \n> "))
             if longAverage < shortAverage:
@@ -48,7 +46,7 @@ class Functions():
             count_average(longAverage)
             return shortAverage, longAverage
 
-        def plot():
+        def plot_moving_average():
             # strzałki w momencie krzyżowania się linii sma
             df['sma_signal'] = np.where(df['sma_' + str(shortAverage) + '-day'] > df['sma_' + str(longAverage) + '-day'], 1, 0)
             df['sma_signal'] = np.where(df['sma_' + str(shortAverage) + '-day'] < df['sma_' + str(longAverage) + '-day'], -1, df['sma_signal'])
@@ -97,8 +95,12 @@ class Functions():
             plt.legend(loc=2);
             plt.show()
                 
+        print("You have chosen to calculate the moving averages.")
+        print("One of the many trading strategies utilising mocing averages puts two differing moving averages on a chart and highlights the "
+            + "crossovers. When the shorter-term moving average crosses above the longer-term moving average, it's a buy signal. In the opposite situation, "
+            + "it's a sell signal.")
         shortAverage, longAverage = select_lengths()
-        plot()
+        plot_moving_average()
         annotated_plot()
 
     def pick_periods():
@@ -186,6 +188,7 @@ class Functions():
                 # View our chart in the system default HTML viewer (Chrome, Firefox, etc.)
                 fig.show()
 
+        print("You have chosen to calculate the Stochastic Oscillator.")
         k_period, d_period = Functions.pick_periods()
         df.ta.stoch(high='High', low='Low', k=k_period, d=d_period, append=True)
         df.info()
@@ -228,6 +231,7 @@ class Functions():
             plt.legend()
             plt.show()
 
+        print("You have chosen to calculate the Double Stochastic.")
         count_double_stochastic()
         plot_double_stoch()
 
@@ -251,6 +255,7 @@ class Functions():
             plt.legend()
             plt.show()
         
+        print("You have chosen to calculate the Bollinger Bands.")
         df.reset_index(inplace = True,drop = True)
         close = df['Close']
         bollinger_up, bollinger_down = count_bollingerbands(close)
@@ -272,6 +277,7 @@ class Functions():
             plt.legend(loc=2);
             plt.show()
 
+        print("You have chosen to calculate the RSI and the MACD.")
         count()
         plot()
 
@@ -311,6 +317,7 @@ class Functions():
             fig = go.Figure(data=[candlestick, atrHigh, atrLow])
 
             fig.show()
-
+        
+        print("You have chosen to calculate the ATR (Candlestick Chart).")
         count_atr()
         plot_atr()

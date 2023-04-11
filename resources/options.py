@@ -1,8 +1,9 @@
 import datetime
 import yfinance as yf
-from functions import Functions
+from resources.functions import Functions
 
 class Options():   
+    @staticmethod
     def get_positive_number(prompt):
         while True:
             try:
@@ -12,8 +13,14 @@ class Options():
                 return num
             except ValueError:
                 print("Invalid input. Please enter a positive number.")
-
-    def print_menu():
+    
+    @staticmethod
+    def print_menu(options):
+        print("\nPlease choose from one of the following options...")
+        for i, option in enumerate(options):
+            print(f"{i+1}. {option}")
+    
+    def main_menu():
         options = [
             "Display the dataframe",  # OR CHANGE DOWNLOAD PERIOD
             "Calculate the moving averages",
@@ -25,12 +32,28 @@ class Options():
             "Show the options menu",
             "Quit program"
         ]
-        print("\nPlease choose from one of the following options...")
-        for i, option in enumerate(options):
-            print(f"{i+1}. {option}")
+        Options.print_menu(options)
+    
+    def options_menu(self):
+        print("You have chosen to display the options menu.")
+        options = [
+            "Change import length of dataframe",  
+            "Exit options and go back to the program"
+        ]
+        Options.print_menu(options)
+        selection = Options.get_positive_number("Please pick the function you want to execute: \n> ")
+        match selection:
+            case 1:
+                print("You have chosen to change import length of dataframe.")
+                df = Options.import_data()
+                print(df)
+                return df
+            case 2:
+                pass
 
+    @staticmethod
     def import_data(): 
-        from options import Options
+        from options import Options        
         okres = Options.get_positive_number("\nHow many months do you want to download the data from? \n> ")
         BeginDay = datetime.date.today() - datetime.timedelta(days = 31 * okres)
         EndDay = datetime.date.today()
@@ -39,43 +62,28 @@ class Options():
         df.drop(columns=['Adj Close'], inplace = True)
         print(1, df)
         return df   
-
+    
     def choose_from_menu(x, df):
-        match x:
-            case 1:
-                print("You have chosen to display the dataframe.")
-                Functions.display_dataframe(df)
-            case 2:
-                print("You have chosen to calculate the moving averages.")
-                Functions.moving_average(df)
-            case 3:
-                print("You have chosen to calculate the Stochastic Oscillator.")
-                Functions.stochastic_oscillator(df)
-            case 4:
-                print("You have chosen to calculate the Double Stochastic.")
-                Functions.double_stochastic(df)
-            case 5:
-                print("You have chosen to calculate the Bollinger Bands.")
-                Functions.bollinger_bands(df)
-            case 6:
-                print("You have chosen to calculate the RSI and the MACD.")
-                Functions.rsi_macd(df)
-            case 7:
-                print("You have chosen to calculate the ATR (Candlestick Chart).")
-                Functions.atr(df)
-            case 8:
-                print("You have chosen to show the options menu.")
-            case 9:
-                print("You have chosen to quit the program.")
-                quit()
-            case _:
-                print("Invalid input. Please enter a number between 1 and 9.")
-
+        options = {
+            1: Functions.display_dataframe,
+            2: Functions.moving_average,
+            3: Functions.stochastic_oscillator,
+            4: Functions.double_stochastic,
+            5: Functions.bollinger_bands,
+            6: Functions.rsi_macd,
+            7: Functions.atr,
+            8: Options.options_menu,
+            9: quit,
+        }
+        
+        func = options.get(x, lambda: print("Invalid input. Please enter a number between 1 and 9."))
+        func(df)
+        return df
 
     if __name__ == '__main__':
         from options import Options
+        df = Options.import_data()
         while True:
-            Options.print_menu()
-            option_selected = get_positive_number("Please enter a positive number: \n> ")
-            df = import_data()
-            Options.choose_from_menu(option_selected, df)
+            Options.main_menu()
+            option_selected = Options.get_positive_number("Please pick the function you want to execute: \n> ")
+            df = Options.choose_from_menu(option_selected, df)
