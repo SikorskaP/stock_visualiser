@@ -1,6 +1,12 @@
-from resources import *
+import sys
+import os.path
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), os.path.pardir)))
+
+import resources
+
+from resources import functions
 import pandas as pd
-import pytest
 
 
 def test_moving_average():
@@ -10,7 +16,7 @@ def test_moving_average():
     })
 
     try:
-        Functions.moving_average(df)
+        functions.moving_average(df)
     except:
         assert False
 
