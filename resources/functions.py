@@ -4,6 +4,7 @@ import pandas_datareader as pdr
 import pandas_ta as ta
 import plotly.graph_objects as go
 import ta
+import pandas as pd
 
 from plotly.subplots import make_subplots
 
@@ -99,6 +100,8 @@ class Functions():
         print("One of the many trading strategies utilising mocing averages puts two differing moving averages on a chart and highlights the "
             + "crossovers. When the shorter-term moving average crosses above the longer-term moving average, it's a buy signal. In the opposite situation, "
             + "it's a sell signal.")
+        shortAverage = 5
+        longAverage = 8 
         shortAverage, longAverage = select_lengths()
         plot_moving_average()
         annotated_plot()
@@ -264,6 +267,8 @@ class Functions():
     def rsi_macd(df):
         def count():
             df['RSI'] = ta.momentum.rsi(df.Close,window=14)
+            print(df)
+            df.info()
             df['MACD'] = ta.trend.macd_diff(df.Close)
             df.dropna(inplace=True)
 
@@ -321,3 +326,22 @@ class Functions():
         print("You have chosen to calculate the ATR (Candlestick Chart).")
         count_atr()
         plot_atr()
+
+    if __name__ == '__main__':
+        test_df = pd.DataFrame({
+        'Open': np.random.randint(1, 100, 200),
+        'High': np.random.randint(1, 100, 200),
+        'Low': np.random.randint(1, 100, 200),
+        'Close': np.random.randint(1, 100, 200),
+        'Volume': np.random.randint(1, 100000, 200)
+         })
+    
+        # Call the rsi_macd function
+        test_df['test_RSI'] = ta.momentum.rsi(test_df.Close,window=14)
+
+        rsi_macd(test_df)
+
+
+        # Call the rsi_macd function
+        Functions.rsi_macd(test_df)
+        print(test_df)

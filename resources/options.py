@@ -1,5 +1,6 @@
 import datetime
 import yfinance as yf
+import pandas as pd
 from resources.functions import Functions
 
 class Options():   
@@ -83,6 +84,7 @@ class Options():
     if __name__ == '__main__':
         from options import Options
         df = Options.import_data()
+        
         while True:
             Options.main_menu()
             option_selected = Options.get_positive_number("Please pick the function you want to execute: \n> ")
